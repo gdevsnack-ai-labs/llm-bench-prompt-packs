@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gdevsnack-ai-labs/llm-bench-prompt-packs/schemas/prompt-pack.schema.json",
+  "title": "LLM Benchmark Prompt Pack",
+  "type": "object",
+  "required": ["meta", "categories", "all"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["name", "description", "source", "collected", "localized", "model_token", "scoring_axes"],
+      "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "source": {"type": "string"},
+        "collected": {"type": "string"},
+        "localized": {"type": "boolean"},
+        "model_token": {"type": "string"},
+        "usage": {"type": "string"},
+        "scoring_axes": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      },
+      "additionalProperties": true
+    },
+    "categories": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["label", "prompts"],
+        "properties": {
+          "label": {"type": "string"},
+          "prompts": {"type": "array", "items": {"$ref": "#/$defs/prompt"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "all": {"type": "array", "items": {"$ref": "#/$defs/prompt"}, "minItems": 1}
+  },
+  "$defs": {
+    "prompt": {
+      "type": "object",
+      "required": ["id", "title", "category", "text", "source", "source_video"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)+$"},
+        "title": {"type": "string", "minLength": 1},
+        "category": {"enum": ["ui", "game", "service", "progressive"]},
+        "text": {"type": "string", "minLength": 100},
+        "source": {"type": "string"},
+        "source_video": {"type": "string"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
